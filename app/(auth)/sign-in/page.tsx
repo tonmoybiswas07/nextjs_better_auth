@@ -1,7 +1,7 @@
 
 "use client";
 
-import { signIn } from "@/app/lib/auth-client";
+import {   signIn } from "@/app/lib/auth-client";
 import { Eye, EyeSlash } from "@gravity-ui/icons";
 import {
   Button,
@@ -40,6 +40,20 @@ const SignInPage = () => {
     console.log("Response:", resData);
     console.log("Error:", error);
   };
+
+  const handleGoogleSignin = async()=>{
+    const resData = await signIn.social({
+    provider: "google",
+    
+  });
+  console.log("after goole sign in ",resData)
+  }
+  const handleGithubSignin = async()=>{
+    const resData = await signIn.social({
+      provider:"github",
+    })
+    console.log("sign in form github",resData)
+  }
 
   return (
     <div>
@@ -144,6 +158,10 @@ const SignInPage = () => {
           </Button>
         </div>
       </Form>
+      
+      <p>or</p>
+      <Button onClick={handleGoogleSignin}>sign in with Google</Button>
+      <Button onClick={handleGithubSignin}>sign in with github</Button>
     </div>
   );
 };

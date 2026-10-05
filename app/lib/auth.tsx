@@ -9,15 +9,33 @@ if (!mongoUrl) {
 }
 
 const client = new MongoClient(mongoUrl);
-
 const db = client.db();
 
 export const auth = betterAuth({
-  database: mongodbAdapter(db, {
-    client,
-  }),
-
   emailAndPassword: {
     enabled: true,
   },
+
+  socialProviders: {
+    google: {
+      clientId: process.env.BETTER_AUTH_CLIENT_ID as string,
+      clientSecret: process.env.BETTER_AUTH_CLIENT_SECRECT as string,
+    },
+     github: { 
+            clientId: process.env.BETTER_AUTH_GITHUB_CLIENT_ID as string, 
+            clientSecret: process.env.BETTER_AUTH_GITHUB_CLIENT_SECRECT as string, 
+        }, 
+  },
+
+  account: {
+    accountLinking: {
+      enabled: true,
+      trustedProviders: ["google"],
+      disableImplicitLinking: false,
+    },
+  },
+
+  database: mongodbAdapter(db, {
+    client,
+  }),
 });

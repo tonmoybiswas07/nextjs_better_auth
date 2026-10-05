@@ -1,32 +1,40 @@
 "use client";
 import { useState } from "react";
-import { Link, Button,Spinner } from "@heroui/react";
+import { Link, Button, Spinner } from "@heroui/react";
 import { signOut, useSession } from "@/app/lib/auth-client";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const { data: session,isPending } = useSession();
+  const { data: session, isPending } = useSession();
 
-if(isPending){
-    return <div className="flex flex-col items-center gap-2">
+  if (isPending) {
+    return (
+      <div className="flex flex-col items-center gap-2">
         <Spinner size="xl" />
         <span className="text-xs text-muted">Loading...</span>
       </div>
-}
+    );
+  }
   const navlinks = (
     <>
       <li>
-        <Link href="#">Features</Link>
+        <Link href="/services">Services</Link>
       </li>
       <li>
-        <Link href="#" className="font-medium text-accent" aria-current="page">
+        <Link
+          href="/dashboard"
+          className="font-medium text-accent"
+          aria-current="page"
+        >
           Dashboard
         </Link>
       </li>
-      <li>
-        <Link href="#">Pricing</Link>
-      </li>
+      {session?.user && (
+        <li>
+          <Link href="/profile">Profile</Link>
+        </li>
+      )}
     </>
   );
   const authLinks = (
@@ -34,7 +42,7 @@ if(isPending){
       {session?.user ? (
         <>
           <p>{session.user.name}</p>
-          <Button onClick={()=>signOut()}>Sign out</Button>
+          <Button onClick={() => signOut()}>Sign out</Button>
         </>
       ) : (
         <>
@@ -42,7 +50,9 @@ if(isPending){
           <Link href="/sign-in" className="block py-2">
             Login
           </Link>
-          <Link href="/sign-up"><Button className="w-full">Sign Up</Button></Link>
+          <Link href="/sign-up">
+            <Button className="w-full">Sign Up</Button>
+          </Link>
         </>
       )}
     </>
@@ -84,7 +94,7 @@ if(isPending){
           </button>
           <div className="flex items-center gap-3">
             {/* <Logo />  */}
-            <p className="font-bold">ACME</p>
+            <Link href="/" className="font-bold">ACME</Link>
           </div>
         </div>
         <ul className="hidden items-center gap-4 md:flex">{navlinks}</ul>
